@@ -1,2 +1,6 @@
 .conda
 *.json
+# This pattern will ignore __pycache__ directories in all folders and subfolders
+**/__pycache__/
+# Also ignore .pyc files which can appear alongside the __pycache__ directories
+**/*.pyc
