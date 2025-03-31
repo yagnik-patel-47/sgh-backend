@@ -22,9 +22,7 @@ class UniSpider(scrapy.Spider):
     link_extractor = LinkExtractor()
 
     def parse(self, response):
-        admission_terms = (
-            r"(?:admission|apply|enroll|registration|announcement|update|notification|calender)"
-        )
+        admission_terms = r"(?:admission|apply|enroll|registration|announcement|update|notification|calendar)"
         word_pattern = rf"\b{admission_terms}\b"
 
         res = {
