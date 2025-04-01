@@ -1,3 +1,5 @@
+annotated-types @ file:///C:/b/abs_0dmaoyhhj3/croot/annotated-types_1709542968311/work
+anyio @ file:///C:/b/abs_31grv7a7bl/croot/anyio_1729121290992/work
 appdirs==1.4.4
 attrs @ file:///C:/b/abs_89hmquz5ga/croot/attrs_1734533130810/work
 Automat @ file:///tmp/build/80754af9/automat_1600298431173/work
@@ -8,16 +10,22 @@ Brotli @ file:///C:/b/abs_c415aux9ra/croot/brotli-split_1736182803933/work
 certifi @ file:///C:/b/abs_8a944p1_gn/croot/certifi_1738623753421/work/certifi
 cffi @ file:///C:/b/abs_29_b57if3f/croot/cffi_1736184144340/work
 charset-normalizer @ file:///croot/charset-normalizer_1721748349566/work
+colorama @ file:///C:/Users/dev-admin/perseverance-python-buildout/croot/colorama_1699472650914/work
 constantly @ file:///C:/b/abs_cbuavw4443/croot/constantly_1703165617403/work
 cryptography @ file:///C:/b/abs_ae5lrkywtg/croot/cryptography_1740577842775/work
 cssselect @ file:///C:/b/abs_71gnjab7b0/croot/cssselect_1707339955530/work
 defusedxml @ file:///tmp/build/80754af9/defusedxml_1615228127516/work
+distro @ file:///C:/b/abs_71xr36ua5r/croot/distro_1714488282676/work
 filelock @ file:///C:/Users/dev-admin/perseverance-python-buildout/croot/filelock_1701807523603/work
+h11 @ file:///C:/b/abs_1czwoyexjf/croot/h11_1706652332846/work
+httpcore @ file:///C:/b/abs_55n7g233bw/croot/httpcore_1706728507241/work
+httpx @ file:///C:/b/abs_43e135shby/croot/httpx_1723474830126/work
 hyperlink @ file:///tmp/build/80754af9/hyperlink_1610130746837/work
 idna @ file:///C:/b/abs_aad84bnnw5/croot/idna_1714398896795/work
 incremental @ file:///croot/incremental_1708639938299/work
 itemadapter @ file:///tmp/build/80754af9/itemadapter_1626442940632/work
 itemloaders @ file:///C:/b/abs_5e3azgv25z/croot/itemloaders_1708639993442/work
+jiter @ file:///C:/b/abs_acsxrw36a6/croot/jiter_1729808947806/work
 jmespath @ file:///C:/Users/dev-admin/perseverance-python-buildout/croot/jmespath_1701807551985/work
 lxml==5.3.0
 mkl-service==2.4.0
@@ -25,6 +33,7 @@ mkl_fft @ file:///C:/Users/dev-admin/mkl/mkl_fft_1730823082242/work
 mkl_random @ file:///C:/Users/dev-admin/mkl/mkl_random_1730822522280/work
 numexpr @ file:///C:/b/abs_05o8p7bfml/croot/numexpr_1730215959182/work
 numpy @ file:///C:/b/abs_0123vcxhf8/croot/numpy_and_numpy_base_1725470331966/work/dist/numpy-2.0.1-cp312-cp312-win_amd64.whl#sha256=e3e9d7fcaa32e9aa86aa46a7191a47fc4c4b35942462bbbedd17c45ef934dccd
+openai @ file:///home/conda/feedstock_root/build_artifacts/openai_1743467416804/work
 packaging @ file:///C:/b/abs_3by6s2fa66/croot/packaging_1734472138782/work
 pandas @ file:///C:/b/abs_e18w9ay4we/croot/pandas_1732735115740/work/dist/pandas-2.2.3-cp312-cp312-win_amd64.whl#sha256=2c8058e41dda2e7ecfff0740ad1d98f17d528c740f71b038c523a9d24d2321b0
 parsel @ file:///C:/b/abs_ebc3tzm_c4/croot/parsel_1707503517596/work
@@ -32,6 +41,8 @@ Protego @ file:///tmp/build/80754af9/protego_1598657180827/work
 pyasn1 @ file:///C:/b/abs_f15ydy2f_9/croot/pyasn1_1729239810559/work
 pyasn1_modules @ file:///home/conda/feedstock_root/build_artifacts/pyasn1-modules_1733324602540/work
 pycparser @ file:///tmp/build/80754af9/pycparser_1636541352034/work
+pydantic @ file:///C:/b/abs_27dx58x550/croot/pydantic_1734736090499/work
+pydantic_core @ file:///C:/b/abs_bdosz7qwys/croot/pydantic-core_1734726071532/work
 PyDispatcher @ file:///C:/Users/dev-admin/perseverance-python-buildout/croot/pydispatcher_1699543033434/work
 pyOpenSSL @ file:///C:/b/abs_6cmmt1gx_z/croot/pyopenssl_1741343840223/work
 PySocks @ file:///C:/Users/dev-admin/perseverance-python-buildout/croot/pysocks_1699473336188/work
@@ -45,8 +56,10 @@ Scrapy @ file:///D:/bld/scrapy_1732089661504/work
 service-identity @ file:///Users/ktietz/demo/mc3/conda-bld/service_identity_1629460757137/work
 setuptools==75.8.0
 six @ file:///tmp/build/80754af9/six_1644875935023/work
+sniffio @ file:///C:/b/abs_3akdewudo_/croot/sniffio_1705431337396/work
 soupsieve @ file:///C:/Users/dev-admin/perseverance-python-buildout/croot/soupsieve_1699496611169/work
 tldextract @ file:///C:/b/abs_34gknp7o18/croot/tldextract_1723064394448/work
+tqdm @ file:///C:/b/abs_0eh9b6xugj/croot/tqdm_1738945553987/work
 Twisted @ file:///C:/b/abs_e7yqd811in/croot/twisted_1708702883769/work
 twisted-iocpsupport @ file:///C:/b/abs_6883jqhfrn/croot/twisted-iocpsupport_1736544552637/work
 typing_extensions @ file:///C:/b/abs_0ffjxtihug/croot/typing_extensions_1734714875646/work

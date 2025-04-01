@@ -64,5 +64,3 @@ Instructions:
     * If there are any ambiguities, include all possible interpretations in the JSON output, with a "possible context" field.
 
 Now, please process the following text and provide the output in the specified JSON format.
-
-content: {page_content}
