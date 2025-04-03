@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 
 def get_sites():
     df = pd.read_csv("sites.csv")
-    return df["url"].tolist()[:50]
+    return df["url"].tolist()[150:250]
 
 
 def remove_trailing_slash(url):

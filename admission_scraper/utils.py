@@ -54,6 +54,30 @@ def extract_context(text, regex_pattern, before=50, after=50):
             }
         )
 
+    # Combine results with the same matched text
+    combined_results = {}
+    for result in results:
+        match_text = result["match"]
+        if match_text in combined_results:
+            # Merge contexts
+            existing = combined_results[match_text]
+            new_context = existing["context"] + "\n\n" + result["context"]
+
+            # Update token ranges
+            start_token = min(existing["start_token"], result["start_token"])
+            end_token = max(existing["end_token"], result["end_token"])
+
+            combined_results[match_text] = {
+                "match": match_text,
+                "context": new_context,
+                "start_token": start_token,
+                "end_token": end_token,
+            }
+        else:
+            combined_results[match_text] = result
+
+    results = list(combined_results.values())
+
     return results
 
 

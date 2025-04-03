@@ -1,11 +1,7 @@
 import scrapy
 import pandas as pd
 import re
-from openai import OpenAI
 from admission_scraper.utils import clean_body_content, extract_context
-
-client = OpenAI(base_url="http://127.0.0.1:1234/v1", api_key="lm-studio")
-MODEL = "llama-3.2-1b-instruct"
 
 
 def getUrls():
@@ -14,7 +10,7 @@ def getUrls():
         urls = df["matched_links"].tolist()
         urls = [url for sublist in urls for url in sublist]
         urls = list(set(urls))
-        return urls[:20]
+        return urls[:50]
     except:
         # If the file doesn't exist, return an empty list
         print("File not found")
@@ -43,6 +39,8 @@ class PagesSpider(scrapy.Spider):
         cleaned_body_content = clean_body_content(body_content)
 
         date_matches = extract_context(cleaned_body_content, date_pattern)
+
+        print(f"\n\nFound {len(date_matches)} date matches in {response.url}\n\n")
 
         if len(date_matches) != 0:
             for date_match in date_matches:
