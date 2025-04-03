@@ -1,12 +1,60 @@
 from bs4 import BeautifulSoup
+import re
 
 
-def extract_body_content(html_content):
-    soup = BeautifulSoup(html_content, "html.parser")
-    body_content = soup.body
-    if body_content:
-        return str(body_content)
-    return ""
+def extract_context(text, regex_pattern, before=50, after=50):
+    # Find all matches of the regex in the text
+    matches = list(re.finditer(regex_pattern, text))
+    if not matches:
+        return []
+
+    results = []
+    for match in matches:
+        # Get the start and end positions of the match
+        start_pos = match.start()
+        end_pos = match.end()
+        matched_text = match.group()
+
+        # Split the text into tokens (words)
+        tokens = text.split()
+
+        # Convert character positions to token positions
+        char_count = 0
+        token_start = 0
+        token_end = 0
+        token_positions = []
+
+        for i, token in enumerate(tokens):
+            token_positions.append(char_count)
+            char_count += len(token) + 1  # +1 for the space
+
+        # Find the token indices corresponding to start_pos and end_pos
+        for i, pos in enumerate(token_positions):
+            if pos <= start_pos:
+                token_start = i
+            if pos <= end_pos:
+                token_end = i
+
+        # Calculate the range for extraction
+        extract_start = max(0, token_start - before)  # Ensure we don't go below 0
+        extract_end = min(
+            len(tokens), token_end + after
+        )  # Ensure we don't exceed text length
+
+        # Extract the tokens and join them back into a string
+        context_tokens = tokens[extract_start:extract_end]
+        context_text = " ".join(context_tokens)
+
+        results.append(
+            {
+                "match": matched_text,
+                "context": context_text,
+                "start_token": extract_start,
+                "end_token": extract_end,
+            }
+        )
+
+    return results
 
 
 def clean_body_content(body_content):
@@ -24,7 +72,7 @@ def clean_body_content(body_content):
     return cleaned_content
 
 
-def split_dom_content(dom_content, max_length=6000):
+def split_content(dom_content, max_length=6000):
     return [
         dom_content[i : i + max_length] for i in range(0, len(dom_content), max_length)
     ]

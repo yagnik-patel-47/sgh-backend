@@ -22,7 +22,7 @@ class UniSpider(scrapy.Spider):
     link_extractor = LinkExtractor()
 
     def parse(self, response):
-        admission_terms = r"(?:admission|apply|enroll|registration|announcement|update|notification|programs|courses|degree|application|intake|enrollment|entry|admit|acceptance|accepting)"
+        admission_terms = r"(?:admission|announcement|update|notification|programs|courses|degree|enrollment)"
         word_pattern = rf"\b{admission_terms}\b"
 
         res = {
@@ -41,17 +41,25 @@ class UniSpider(scrapy.Spider):
                 res["matched_links"].append(remove_trailing_slash(link.url))
                 print(f"Found matches {response.url} - {word_matches} in '{link.url}'")
 
-        # links = response.css("a").getall()
-        # for link in links:
-        #     soup = BeautifulSoup(link, "html.parser")
-        #     link = soup.a.get("href")
-        #     text = soup.a.get_text()
-        #     if not link:
-        #         continue
-        #     text_matches = re.findall(word_pattern, text, re.IGNORECASE)
-        #     url_matches = re.findall(word_pattern, link, re.IGNORECASE)
-        #     word_matches = [*text_matches, *url_matches]
-        #     if word_matches:
-        #         print(f"Found matches {word_matches} in '{link}'")
+        if not res["matched_links"]:
+            links = response.css("a").getall()
+            for link in links:
+                soup = BeautifulSoup(link, "html.parser")
+                link = soup.a.get("href")
+                text = soup.a.get_text()
+                if not link:
+                    continue
+                text_matches = re.findall(word_pattern, text, re.IGNORECASE)
+                url_matches = re.findall(word_pattern, link, re.IGNORECASE)
+                word_matches = [*text_matches, *url_matches]
+                if word_matches:
+                    if (
+                        word_matches
+                        and remove_trailing_slash(link.url) not in res["matched_links"]
+                    ):
+                        res["matched_links"].append(remove_trailing_slash(link.url))
+                        print(
+                            f"Found matches {response.url} - {word_matches} in '{link.url}'"
+                        )
 
         yield res
