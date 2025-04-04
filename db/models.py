@@ -31,3 +31,18 @@ class State(Base):
 
     def __repr__(self):
         return f"<name='{self.name}')>"
+
+
+class Program(Base):
+    __tablename__ = "programs"
+
+    program_id = Column(Uuid, primary_key=True, server_default=str("gen_random_uuid()"))
+    name = Column(String(100), unique=True, nullable=False)
+    description = Column(Text, nullable=True)
+    degree_level = Column(String(50), nullable=True)
+    duration_months = Column(Integer, nullable=True)
+    created_at = Column(TIMESTAMP, default=datetime.now())
+    updated_at = Column(TIMESTAMP, default=datetime.now())
+
+    def __repr__(self):
+        return f"<name='{self.name}')>"

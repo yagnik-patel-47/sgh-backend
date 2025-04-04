@@ -1,62 +1,13 @@
 from sqlalchemy.orm import Session
-from models import Institute, State
+from models import Institute, State, Program
 from setup import get_db
 import pandas as pd
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError
 import logging
-import re
+from utils import split_content, normalize_state_name, get_all_states
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-
-
-def split_content(content, max_length=100):
-    return [content[i : i + max_length] for i in range(0, len(content), max_length)]
-
-
-def normalize_state_name(state_name):
-    """Normalize state name for better matching"""
-    if not state_name:
-        return ""
-
-    # Convert to lowercase
-    normalized = state_name.lower().strip()
-
-    # Remove special characters and extra spaces
-    normalized = re.sub(r"[^\w\s]", "", normalized)
-    normalized = re.sub(r"\s+", " ", normalized)
-
-    # Common abbreviation mappings
-    abbreviations = {
-        "ap": "andhra pradesh",
-        "ts": "telangana",
-        "tn": "tamil nadu",
-        "wb": "west bengal",
-        "up": "uttar pradesh",
-        "mp": "madhya pradesh",
-        "jk": "jammu and kashmir",
-        "hp": "himachal pradesh",
-        "nct": "delhi",
-    }
-
-    if normalized in abbreviations:
-        normalized = abbreviations[normalized]
-
-    return normalized
-
-
-def get_all_states(db: Session):
-    states = db.query(State).all()
-    states_list = []
-    for state in states:
-        states_list.append(
-            {
-                "state_id": state.state_id,
-                "name": state.name,
-                "abbreviation": state.abbreviation,
-            }
-        )
-    return states_list
 
 
 def seed_institutes(db: Session):
@@ -150,7 +101,7 @@ def seed_institutes(db: Session):
 
 
 def seed_states(db: Session):
-    states = pd.read_json("db\seed_data\states.json")
+    states = pd.read_json("seed_data\states.json")
     states = states.to_dict(orient="records")
 
     try:
@@ -171,7 +122,33 @@ def seed_states(db: Session):
         raise Exception(f"Database error: {str(e)}")
 
 
+def seed_programs(db: Session):
+    programs = pd.read_json("seed_data\programs.json")
+    programs = programs.to_dict(orient="records")
+
+    try:
+        for program in programs:
+            program_instance = Program(
+                name=program["name"],
+                description=program["description"],
+                degree_level=program["degree_level"],
+                duration_months=program["duration_months"],
+            )
+            db.add(program_instance)
+        db.commit()
+    except IntegrityError as e:
+        db.rollback()
+        logger.error(f"Integrity error creating program: {str(e)}")
+        raise ValueError(f"Value already exists: {str(e)}")
+    except SQLAlchemyError as e:
+        db.rollback()
+        logger.error(f"Database error creating program: {str(e)}")
+        raise Exception(f"Database error: {str(e)}")
+
+
 if __name__ == "__main__":
-    db = next(get_db())
-    seed_states(db)
-    seed_institutes(db)
+    # db = next(get_db())
+    # seed_states(db)
+    # seed_institutes(db)
+    # seed_programs(db)
+    pass

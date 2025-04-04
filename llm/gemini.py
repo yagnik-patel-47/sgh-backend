@@ -3,21 +3,18 @@ from google.genai import types
 from dotenv import load_dotenv
 import os
 import json
+from utils import extract_program_names
 
 load_dotenv()
 
 content = """
-Last date to apply for UG & PG programmes for this round of admissions
-12 Apr 2025
-Jaipur
-Campus
-Last date to apply for UG & PG programmes for this round of admissions
-15 Apr 2025
-Amity Universe
+Admission Notice 2024-25 for Payment Click to view | Notice for NAD Digilocker ABC ID Click to view | Home / PG Diploma Courses PG Diploma Courses PG Diploma Courses Date: 20/06/2023 Letter No. : CNLU/PGDC/2023-06 : List of selected candidates for Post Graduate Diploma Courses at CNLU, Patna Date: 31/03/2023 Notice for PG Diploma Courses Chanakya National Law University, Patna has begin One Year Post Graduate Diploma Course for the Academic Session 2022 – 2023. a) Post Graduate Diploma in Human Rights. b) Post Graduate Diploma in Cyber Law. c) Post Graduate Diploma in Intellectual Property Law. d) Post Graduate
 """
+url = "https://cnlu.ac.in/pg-diploma-courses/"
 
-prompt = f"\ncontent:\n\n{content}"
+prompt = f"Text Chunk:\n{content}\nSource URL: {url}"
 base_prompt = ""
+programs = extract_program_names()
 
 try:
     with open("base_prompt.txt", "r") as file:
@@ -91,6 +88,14 @@ response = client.models.generate_content(
                                     "general",
                                 ],
                                 "description": "Type of announcement",
+                            },
+                            "programs_courses": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string",
+                                    "enum": programs,
+                                    "description": "Names of programs or courses related to the announcement",
+                                },
                             },
                         },
                     },

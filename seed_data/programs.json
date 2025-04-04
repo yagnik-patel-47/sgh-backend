@@ -1,0 +1,470 @@
+[
+  {
+    "name": "Bachelor of Technology (B.Tech)",
+    "description": "A four-year undergraduate engineering degree program that focuses on various engineering disciplines such as Computer Science, Electronics, Mechanical, Civil, etc.",
+    "degree_level": "Undergraduate",
+    "duration_months": 48
+  },
+  {
+    "name": "Bachelor of Technology (B.Tech) - Computer Science",
+    "description": "A four-year undergraduate program focusing on computer programming, algorithms, data structures, software engineering, and emerging technologies.",
+    "degree_level": "Undergraduate",
+    "duration_months": 48
+  },
+  {
+    "name": "Bachelor of Technology (B.Tech) - Electronics & Communication",
+    "description": "A four-year undergraduate program covering electronic devices, communication systems, signal processing, and networking technologies.",
+    "degree_level": "Undergraduate",
+    "duration_months": 48
+  },
+  {
+    "name": "Bachelor of Technology (B.Tech) - Mechanical Engineering",
+    "description": "A four-year undergraduate program focusing on machine design, thermodynamics, manufacturing processes, and mechanical systems.",
+    "degree_level": "Undergraduate",
+    "duration_months": 48
+  },
+  {
+    "name": "Bachelor of Technology (B.Tech) - Civil Engineering",
+    "description": "A four-year undergraduate program covering structural engineering, construction management, transportation, and environmental systems.",
+    "degree_level": "Undergraduate",
+    "duration_months": 48
+  },
+  {
+    "name": "Bachelor of Technology (B.Tech) - Electrical Engineering",
+    "description": "A four-year undergraduate program focusing on electrical systems, power generation, electrical machines, and control systems.",
+    "degree_level": "Undergraduate",
+    "duration_months": 48
+  },
+  {
+    "name": "Bachelor of Technology (B.Tech) - Information Technology",
+    "description": "A four-year undergraduate program covering information systems, database management, networking, and IT infrastructure.",
+    "degree_level": "Undergraduate",
+    "duration_months": 48
+  },
+  {
+    "name": "Bachelor of Technology (B.Tech) - Biotechnology",
+    "description": "A four-year undergraduate program focusing on biological sciences, genetic engineering, and technological applications in biological systems.",
+    "degree_level": "Undergraduate",
+    "duration_months": 48
+  },
+  {
+    "name": "Bachelor of Arts (BA)",
+    "description": "A three-year undergraduate program covering humanities and social sciences disciplines like History, Economics, Political Science, Literature, etc.",
+    "degree_level": "Undergraduate",
+    "duration_months": 36
+  },
+  {
+    "name": "Bachelor of Arts (BA) - Economics",
+    "description": "A three-year undergraduate program focusing on micro and macroeconomics, economic theory, and statistical analysis.",
+    "degree_level": "Undergraduate",
+    "duration_months": 36
+  },
+  {
+    "name": "Bachelor of Arts (BA) - English Literature",
+    "description": "A three-year undergraduate program covering literary analysis, critical theory, and the study of English language texts.",
+    "degree_level": "Undergraduate",
+    "duration_months": 36
+  },
+  {
+    "name": "Bachelor of Arts (BA) - History",
+    "description": "A three-year undergraduate program focusing on historical events, historiography, and cultural and social developments.",
+    "degree_level": "Undergraduate",
+    "duration_months": 36
+  },
+  {
+    "name": "Bachelor of Arts (BA) - Political Science",
+    "description": "A three-year undergraduate program covering political theory, governance systems, international relations, and public policy.",
+    "degree_level": "Undergraduate",
+    "duration_months": 36
+  },
+  {
+    "name": "Bachelor of Arts (BA) - Psychology",
+    "description": "A three-year undergraduate program focusing on human behavior, cognitive processes, and psychological theories.",
+    "degree_level": "Undergraduate",
+    "duration_months": 36
+  },
+  {
+    "name": "Bachelor of Arts (BA) - Sociology",
+    "description": "A three-year undergraduate program focusing on social structures, human relationships, and societal patterns.",
+    "degree_level": "Undergraduate",
+    "duration_months": 36
+  },
+  {
+    "name": "Bachelor of Commerce (B.Com)",
+    "description": "A three-year undergraduate program focusing on business, commerce, accounting, finance and economics.",
+    "degree_level": "Undergraduate",
+    "duration_months": 36
+  },
+  {
+    "name": "Bachelor of Commerce (B.Com) - General",
+    "description": "A three-year undergraduate program covering accounting principles, business management, economics, and finance.",
+    "degree_level": "Undergraduate",
+    "duration_months": 36
+  },
+  {
+    "name": "Bachelor of Commerce (B.Com) - Accounting & Finance",
+    "description": "A three-year specialized undergraduate program focusing on financial accounting, corporate finance, and taxation.",
+    "degree_level": "Undergraduate",
+    "duration_months": 36
+  },
+  {
+    "name": "Bachelor of Commerce (B.Com) - Banking & Insurance",
+    "description": "A three-year specialized undergraduate program covering banking operations, insurance principles, and financial markets.",
+    "degree_level": "Undergraduate",
+    "duration_months": 36
+  },
+  {
+    "name": "Bachelor of Science (B.Sc)",
+    "description": "A three-year undergraduate program covering scientific disciplines like Physics, Chemistry, Mathematics, Biology, etc.",
+    "degree_level": "Undergraduate",
+    "duration_months": 36
+  },
+  {
+    "name": "Bachelor of Science (B.Sc) - Physics",
+    "description": "A three-year undergraduate program focusing on classical and modern physics, quantum mechanics, and mathematical physics.",
+    "degree_level": "Undergraduate",
+    "duration_months": 36
+  },
+  {
+    "name": "Bachelor of Science (B.Sc) - Chemistry",
+    "description": "A three-year undergraduate program covering organic, inorganic, and physical chemistry with laboratory components.",
+    "degree_level": "Undergraduate",
+    "duration_months": 36
+  },
+  {
+    "name": "Bachelor of Science (B.Sc) - Mathematics",
+    "description": "A three-year undergraduate program focusing on pure and applied mathematics, including calculus, algebra, and statistics.",
+    "degree_level": "Undergraduate",
+    "duration_months": 36
+  },
+  {
+    "name": "Bachelor of Science (B.Sc) - Computer Science",
+    "description": "A three-year undergraduate program covering programming, algorithms, database systems, and software development.",
+    "degree_level": "Undergraduate",
+    "duration_months": 36
+  },
+  {
+    "name": "Bachelor of Science (B.Sc) - Biology",
+    "description": "A three-year undergraduate program focusing on botany, zoology, microbiology, and biological systems.",
+    "degree_level": "Undergraduate",
+    "duration_months": 36
+  },
+  {
+    "name": "Master of Technology (M.Tech)",
+    "description": "A two-year postgraduate engineering program that offers advanced knowledge and specialization in engineering fields.",
+    "degree_level": "Postgraduate",
+    "duration_months": 24
+  },
+  {
+    "name": "Master of Technology (M.Tech) - Computer Science & Engineering",
+    "description": "A two-year postgraduate program offering advanced study in computer architecture, machine learning, artificial intelligence, and data science.",
+    "degree_level": "Postgraduate",
+    "duration_months": 24
+  },
+  {
+    "name": "Master of Technology (M.Tech) - Electronics & Communication",
+    "description": "A two-year postgraduate program focusing on advanced communication systems, VLSI design, embedded systems, and signal processing.",
+    "degree_level": "Postgraduate",
+    "duration_months": 24
+  },
+  {
+    "name": "Master of Technology (M.Tech) - Mechanical Engineering",
+    "description": "A two-year postgraduate program with specialization in thermal engineering, manufacturing technology, or machine design.",
+    "degree_level": "Postgraduate",
+    "duration_months": 24
+  },
+  {
+    "name": "Master of Technology (M.Tech) - Civil Engineering",
+    "description": "A two-year postgraduate program offering specialization in structural engineering, geotechnical engineering, or transportation systems.",
+    "degree_level": "Postgraduate",
+    "duration_months": 24
+  },
+  {
+    "name": "Master of Business Administration (MBA)",
+    "description": "A two-year postgraduate program focusing on business administration, management principles, and leadership skills.",
+    "degree_level": "Postgraduate",
+    "duration_months": 24
+  },
+  {
+    "name": "Master of Business Administration (MBA) - Finance",
+    "description": "A two-year postgraduate program specializing in financial management, investment analysis, and corporate finance.",
+    "degree_level": "Postgraduate",
+    "duration_months": 24
+  },
+  {
+    "name": "Master of Business Administration (MBA) - Marketing",
+    "description": "A two-year postgraduate program focusing on marketing strategies, consumer behavior, and brand management.",
+    "degree_level": "Postgraduate",
+    "duration_months": 24
+  },
+  {
+    "name": "Master of Business Administration (MBA) - Human Resources",
+    "description": "A two-year postgraduate program specializing in personnel management, organizational behavior, and talent development.",
+    "degree_level": "Postgraduate",
+    "duration_months": 24
+  },
+  {
+    "name": "Master of Business Administration (MBA) - Operations",
+    "description": "A two-year postgraduate program focusing on supply chain management, project management, and operational efficiency.",
+    "degree_level": "Postgraduate",
+    "duration_months": 24
+  },
+  {
+    "name": "Master of Business Administration (MBA) - Information Technology",
+    "description": "A two-year postgraduate program emphasizing IT management, digital transformation, and technology strategy.",
+    "degree_level": "Postgraduate",
+    "duration_months": 24
+  },
+  {
+    "name": "Master of Arts (MA)",
+    "description": "A two-year postgraduate program in humanities and social sciences offering specialized knowledge in subjects like Economics, History, Psychology, etc.",
+    "degree_level": "Postgraduate",
+    "duration_months": 24
+  },
+  {
+    "name": "Master of Arts (MA) - Economics",
+    "description": "A two-year postgraduate program offering advanced study in economic theory, econometrics, and policy analysis.",
+    "degree_level": "Postgraduate",
+    "duration_months": 24
+  },
+  {
+    "name": "Master of Arts (MA) - English",
+    "description": "A two-year postgraduate program focusing on advanced literary analysis, critical theory, and research methodologies.",
+    "degree_level": "Postgraduate",
+    "duration_months": 24
+  },
+  {
+    "name": "Master of Arts (MA) - Psychology",
+    "description": "A two-year postgraduate program with specializations in clinical, organizational, or counseling psychology.",
+    "degree_level": "Postgraduate",
+    "duration_months": 24
+  },
+  {
+    "name": "Master of Arts (MA) - Political Science",
+    "description": "A two-year postgraduate program focusing on advanced political theory, international relations, and governance.",
+    "degree_level": "Postgraduate",
+    "duration_months": 24
+  },
+  {
+    "name": "Master of Science (M.Sc)",
+    "description": "A two-year postgraduate science program offering advanced scientific education and research in various scientific disciplines.",
+    "degree_level": "Postgraduate",
+    "duration_months": 24
+  },
+  {
+    "name": "Master of Science (M.Sc) - Physics",
+    "description": "A two-year postgraduate program offering advanced study in theoretical physics, experimental physics, and astrophysics.",
+    "degree_level": "Postgraduate",
+    "duration_months": 24
+  },
+  {
+    "name": "Master of Science (M.Sc) - Chemistry",
+    "description": "A two-year postgraduate program with specializations in organic, inorganic, physical, or analytical chemistry.",
+    "degree_level": "Postgraduate",
+    "duration_months": 24
+  },
+  {
+    "name": "Master of Science (M.Sc) - Mathematics",
+    "description": "A two-year postgraduate program focusing on advanced mathematical theories, applications, and research methods.",
+    "degree_level": "Postgraduate",
+    "duration_months": 24
+  },
+  {
+    "name": "Master of Science (M.Sc) - Biotechnology",
+    "description": "A two-year postgraduate program offering advanced study in molecular biology, genetic engineering, and biotechnological applications.",
+    "degree_level": "Postgraduate",
+    "duration_months": 24
+  },
+  {
+    "name": "Bachelor of Medicine, Bachelor of Surgery (MBBS)",
+    "description": "A five and a half year undergraduate medical program including one year of internship, focusing on medical science and clinical practice.",
+    "degree_level": "Professional",
+    "duration_months": 66
+  },
+  {
+    "name": "Bachelor of Dental Surgery (BDS)",
+    "description": "A five-year professional program focusing on dental sciences, oral health, and clinical dental practice.",
+    "degree_level": "Professional",
+    "duration_months": 60
+  },
+  {
+    "name": "Bachelor of Ayurvedic Medicine and Surgery (BAMS)",
+    "description": "A five and a half year program focusing on traditional Ayurvedic medicine and therapeutic techniques.",
+    "degree_level": "Professional",
+    "duration_months": 66
+  },
+  {
+    "name": "Bachelor of Homeopathic Medicine and Surgery (BHMS)",
+    "description": "A five and a half year program covering homeopathic principles, medicine preparation, and clinical practice.",
+    "degree_level": "Professional",
+    "duration_months": 66
+  },
+  {
+    "name": "Bachelor of Law (LLB)",
+    "description": "A three-year undergraduate law program (five years for integrated BA/B.Sc LLB) focusing on legal principles, statutes, and case laws.",
+    "degree_level": "Professional",
+    "duration_months": 36
+  },
+  {
+    "name": "Bachelor of Law (LLB) - 3-Year",
+    "description": "A three-year professional law program for graduates focusing on Indian legal system, constitutional law, and various specialized laws.",
+    "degree_level": "Professional",
+    "duration_months": 36
+  },
+  {
+    "name": "Bachelor of Law (LLB) - 5-Year Integrated",
+    "description": "A five-year integrated program combining undergraduate education with legal studies for high school graduates.",
+    "degree_level": "Professional",
+    "duration_months": 60
+  },
+  {
+    "name": "Bachelor of Pharmacy (B.Pharm)",
+    "description": "A four-year undergraduate program focusing on pharmaceutical sciences, drug development, and pharmacy practice.",
+    "degree_level": "Professional",
+    "duration_months": 48
+  },
+  {
+    "name": "Bachelor of Architecture (B.Arch)",
+    "description": "A five-year professional program focusing on architectural design, building technology, and urban planning.",
+    "degree_level": "Professional",
+    "duration_months": 60
+  },
+  {
+    "name": "Bachelor of Hotel Management (BHM)",
+    "description": "A four-year professional program focusing on hospitality management, food service, and hotel administration.",
+    "degree_level": "Professional",
+    "duration_months": 48
+  },
+  {
+    "name": "Bachelor of Education (B.Ed)",
+    "description": "A two-year professional degree program focusing on teacher training and education theory for becoming a qualified teacher.",
+    "degree_level": "Professional",
+    "duration_months": 24
+  },
+  {
+    "name": "Bachelor of Physical Education (B.P.Ed)",
+    "description": "A two-year professional program focusing on physical education instruction, sports coaching, and fitness management.",
+    "degree_level": "Professional",
+    "duration_months": 24
+  },
+  {
+    "name": "Bachelor of Design (B.Des) - Fashion Design",
+    "description": "A four-year professional program focusing on garment design, textile development, and fashion industry practices.",
+    "degree_level": "Professional",
+    "duration_months": 48
+  },
+  {
+    "name": "Bachelor of Design (B.Des) - Interior Design",
+    "description": "A four-year professional program covering interior space planning, furniture design, and architectural visualization.",
+    "degree_level": "Professional",
+    "duration_months": 48
+  },
+  {
+    "name": "Bachelor of Computer Applications (BCA)",
+    "description": "A three-year professional program focusing on computer applications, programming, and software development.",
+    "degree_level": "Professional",
+    "duration_months": 36
+  },
+  {
+    "name": "Master of Computer Applications (MCA)",
+    "description": "A two-year postgraduate program offering advanced study in computer applications and software development.",
+    "degree_level": "Postgraduate",
+    "duration_months": 24
+  },
+  {
+    "name": "Doctor of Philosophy (PhD)",
+    "description": "A research-based doctoral program typically lasting 3-5 years, focusing on original research contribution in various academic fields.",
+    "degree_level": "Doctorate",
+    "duration_months": 48
+  },
+  {
+    "name": "Doctor of Philosophy (PhD) - Engineering",
+    "description": "A research-based doctoral program in engineering disciplines focusing on original research and technological innovation.",
+    "degree_level": "Doctorate",
+    "duration_months": 48
+  },
+  {
+    "name": "Doctor of Philosophy (PhD) - Science",
+    "description": "A research-based doctoral program in scientific disciplines focusing on original research contribution to scientific knowledge.",
+    "degree_level": "Doctorate",
+    "duration_months": 48
+  },
+  {
+    "name": "Doctor of Philosophy (PhD) - Arts & Humanities",
+    "description": "A research-based doctoral program in arts and humanities focusing on original research in history, literature, philosophy, etc.",
+    "degree_level": "Doctorate",
+    "duration_months": 48
+  },
+  {
+    "name": "Doctor of Philosophy (PhD) - Management",
+    "description": "A research-based doctoral program focusing on original research contribution to business and management disciplines.",
+    "degree_level": "Doctorate",
+    "duration_months": 48
+  },
+  {
+    "name": "Doctor of Medicine (MD)",
+    "description": "A three-year postgraduate medical degree following MBBS, offering specialization in various medical disciplines.",
+    "degree_level": "Doctorate",
+    "duration_months": 36
+  },
+  {
+    "name": "Master of Surgery (MS)",
+    "description": "A three-year postgraduate surgical specialization following MBBS, focusing on surgical procedures and practices.",
+    "degree_level": "Postgraduate",
+    "duration_months": 36
+  },
+  {
+    "name": "Diploma in Engineering",
+    "description": "A three-year diploma program offering technical education in engineering disciplines as an alternative to a full engineering degree.",
+    "degree_level": "Diploma",
+    "duration_months": 36
+  },
+  {
+    "name": "Diploma in Engineering - Mechanical",
+    "description": "A three-year technical diploma program focusing on mechanical engineering principles and workshop practices.",
+    "degree_level": "Diploma",
+    "duration_months": 36
+  },
+  {
+    "name": "Diploma in Engineering - Civil",
+    "description": "A three-year technical diploma program covering civil engineering drawing, surveying, and construction practices.",
+    "degree_level": "Diploma",
+    "duration_months": 36
+  },
+  {
+    "name": "Diploma in Engineering - Electrical",
+    "description": "A three-year technical diploma program focusing on electrical circuits, power systems, and electrical equipment.",
+    "degree_level": "Diploma",
+    "duration_months": 36
+  },
+  {
+    "name": "Diploma in Engineering - Computer Science",
+    "description": "A three-year technical diploma program covering computer programming, hardware, and system maintenance.",
+    "degree_level": "Diploma",
+    "duration_months": 36
+  },
+  {
+    "name": "Diploma in Pharmacy (D.Pharm)",
+    "description": "A two-year diploma program covering basic pharmaceutical sciences and pharmacy practice.",
+    "degree_level": "Diploma",
+    "duration_months": 24
+  },
+  {
+    "name": "Post Graduate Diploma in Management (PGDM)",
+    "description": "A two-year postgraduate diploma program equivalent to MBA, focusing on business management and administration.",
+    "degree_level": "Diploma",
+    "duration_months": 24
+  },
+  {
+    "name": "Post Graduate Diploma in Computer Applications (PGDCA)",
+    "description": "A one-year postgraduate diploma program covering computer applications and software tools.",
+    "degree_level": "Diploma",
+    "duration_months": 12
+  },
+  {
+    "name": "Diploma in Hotel Management",
+    "description": "A one to two-year diploma program covering food production, front office operations, and hospitality management.",
+    "degree_level": "Diploma",
+    "duration_months": 18
+  }
+]

@@ -17,6 +17,30 @@ def getUrls():
         return []
 
 
+def get_site_from_link(link):
+    """
+    Extract the site value from uni.json that contains the given link in its matched_links.
+
+    Args:
+        link (str): A URL that might be in matched_links of a site
+
+    Returns:
+        str: The site value if found, None otherwise
+    """
+    try:
+        with open("uni.json", "r") as f:
+            data = pd.read_json(f)
+
+        for _, row in data.iterrows():
+            if link in row["matched_links"]:
+                return row["site"]
+
+        return None
+    except Exception as e:
+        print(f"Error finding site for link {link}: {e}")
+        return None
+
+
 class PagesSpider(scrapy.Spider):
     name = "pages"
     start_urls = getUrls()
@@ -49,9 +73,10 @@ class PagesSpider(scrapy.Spider):
                         word_pattern, date_match["context"], re.IGNORECASE
                     )
                     if word_matches:
-                        # print(f"Found matches {word_matches} in '{date_match['context']}'")
+                        site = get_site_from_link(response.url)
                         yield {
                             "url": response.url,
+                            "site": site,
                             "date": date_match["match"],
                             "context": date_match["context"],
                         }
