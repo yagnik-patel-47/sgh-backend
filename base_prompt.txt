@@ -12,7 +12,7 @@ You are an expert data extraction and structuring tool. Your task is to analyze 
 - `application_deadline`: DATE (YYYY-MM-DD)
 - `term`: VARCHAR(50) (e.g., "Fall 2025")
 - `contact_info`: TEXT
-- `announcement_type`: VARCHAR(50) ('admission_dates', 'contact_info', 'general')
+- `announcement_type`: VARCHAR(50) ('admission_dates', 'contact_info', 'exam_info', 'result_info', 'general')
 -  Related Programs/Courses -> JSON key: `programs_courses` (array of strings)
 
 **Note:** You do NOT need to extract or generate `announcement_id`, `url`, `institution_id`, `state_id`, `created_at`, or `updated_at`. These are handled externally or by the database.
@@ -30,8 +30,10 @@ You are an expert data extraction and structuring tool. Your task is to analyze 
     * **`term`**: Identify the relevant academic term (e.g., "Fall 2025", "Spring 2026", "Academic Year 2025-2026"). If not applicable or found, use `null`.
     * **`contact_info`**: Extract any instructions or details on who/how to contact for more information (e.g., "Email admissions@college.edu", "Visit the portal", "Call 555-1234"). If not applicable or found, use `null`.
     * **`announcement_type`**: Classify the *primary* nature of this specific announcement. Choose one:
-        * `'admission_dates'`: If the main point involves specific dates like deadlines or opening dates.
+        * `'admission_dates'`: If the main point involves specific dates like deadlines or opening dates related to admission AND either application_open_date or application_deadline is available AND the information is specifically about student admission to the institute (not exam dates or fees deadline or other events).
         * `'contact_info'`: If the main point is directing the user to contact the institution.
+        * `'exam_info'`: If the main point concerns entrance exams (dates, registration, syllabus, procedures).
+        * `'result_info'`: If the main point relates to the publication of admission results, merit lists, or selection status.
         * `'general'`: For other relevant information (e.g., requirement changes, info sessions, general notices).
     * **`programs_courses`**: Identify specific program or course names mentioned in the text *or* strongly implied by the text and the provided Source URL context. List them as an array of strings which are provided in enums. If none are clearly identified, use an empty array `[]`. Don't generate duplicate values
 4.  **Date Handling:**
@@ -66,6 +68,39 @@ You are an expert data extraction and structuring tool. Your task is to analyze 
           "contact_info": "contact the CS department admissions team via our website",
           "announcement_type": "admission_dates",
           "programs_courses": ["Bachelor of Technology (B.Tech) - Computer Science", "Bachelor of Technology (B.Tech) - Data Science"]
+        }
+      ]
+    }
+    ```
+
+    Text Chunk:
+    "The entrance examination for the Engineering programs will be held on June 10th, 2025. Admit cards can be downloaded starting May 25th. The first merit list for Fall 2025 admissions will be published on July 20th, 2025."
+    Input Source URL: `https://example.edu/admissions/engineering`
+
+    ```json
+    {
+      "announcements":  [
+        {
+          "title": "Engineering Entrance Exam Date Announced",
+          "content": "The entrance examination for the Engineering programs will be held on June 10th, 2025. Admit cards can be downloaded starting May 25th.",
+          "published_date": null,
+          "application_open_date": null,
+          "application_deadline": null,
+          "term": null,
+          "contact_info": null,
+          "announcement_type": "exam_info",
+          "programs_courses": ["Bachelor of Technology (B.Tech)"]
+        },
+        {
+          "title": "Fall 2025 First Merit List Publication Date",
+          "content": "The first merit list for Fall 2025 admissions will be published on July 20th, 2025.",
+          "published_date": null,
+          "application_open_date": null,
+          "application_deadline": null,
+          "term": "Fall 2025",
+          "contact_info": null,
+          "announcement_type": "result_info",
+          "programs_courses": ["Bachelor of Technology (B.Tech)"]
         }
       ]
     }

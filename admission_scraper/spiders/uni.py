@@ -6,8 +6,8 @@ from bs4 import BeautifulSoup
 
 
 def get_sites():
-    df = pd.read_csv("sites.csv")
-    return df["url"].tolist()[150:250]
+    df = pd.read_csv("data/central_universities.csv")
+    return df["url"].tolist()
 
 
 def remove_trailing_slash(url):
@@ -18,15 +18,36 @@ def remove_trailing_slash(url):
 
 class UniSpider(scrapy.Spider):
     name = "uni"
-    start_urls = get_sites()
+
+    def start_requests(self):
+        urls = get_sites()
+        for url in urls:
+            yield scrapy.Request(
+                url=url, callback=self.parse, meta={"original_url": url}
+            )
+
     link_extractor = LinkExtractor()
 
     def parse(self, response):
-        admission_terms = r"(?:admission|announcement|update|notification|programs|courses|degree|enrollment)"
-        word_pattern = rf"\b{admission_terms}\b"
+        admission_terms = [
+            "admission",
+            "announcement",
+            "update",
+            "notification",
+            # "program",
+            # "course",
+            # "degree",
+            "enrollment",
+        ]
+        word_pattern = r"\b(?:" + "|".join(admission_terms) + r")s?\b"
 
+        # Use original URL from the CSV instead of response.url
+        original_url = response.meta.get("original_url")
+
+        # TODO: Actually update the initial url with the response.url in csv
         res = {
-            "site": response.url,
+            "site": remove_trailing_slash(response.url),
+            "original_url": remove_trailing_slash(original_url),
             "matched_links": [],
         }
 
@@ -45,21 +66,21 @@ class UniSpider(scrapy.Spider):
             links = response.css("a").getall()
             for link in links:
                 soup = BeautifulSoup(link, "html.parser")
-                link = soup.a.get("href")
+                link_href = soup.a.get("href")
                 text = soup.a.get_text()
-                if not link:
+                if not link_href:
                     continue
                 text_matches = re.findall(word_pattern, text, re.IGNORECASE)
-                url_matches = re.findall(word_pattern, link, re.IGNORECASE)
+                url_matches = re.findall(word_pattern, link_href, re.IGNORECASE)
                 word_matches = [*text_matches, *url_matches]
                 if word_matches:
                     if (
                         word_matches
-                        and remove_trailing_slash(link.url) not in res["matched_links"]
+                        and remove_trailing_slash(link_href) not in res["matched_links"]
                     ):
-                        res["matched_links"].append(remove_trailing_slash(link.url))
+                        res["matched_links"].append(remove_trailing_slash(link_href))
                         print(
-                            f"Found matches {response.url} - {word_matches} in '{link.url}'"
+                            f"Found matches {response.url} - {word_matches} in '{link_href}'"
                         )
 
         yield res

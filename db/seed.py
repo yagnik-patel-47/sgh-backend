@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 
 def seed_institutes(db: Session):
     # Load sites data
-    df = pd.read_csv("sites.csv")
+    df = pd.read_csv("data/central_universities.csv")
     data = df.to_dict(orient="records")
 
     # Load states data and create a mapping of state names to state_ids
@@ -101,7 +101,7 @@ def seed_institutes(db: Session):
 
 
 def seed_states(db: Session):
-    states = pd.read_json("seed_data\states.json")
+    states = pd.read_json("seed_data\\states.json")
     states = states.to_dict(orient="records")
 
     try:
@@ -123,7 +123,7 @@ def seed_states(db: Session):
 
 
 def seed_programs(db: Session):
-    programs = pd.read_json("seed_data\programs.json")
+    programs = pd.read_json("seed_data\\programs.json")
     programs = programs.to_dict(orient="records")
 
     try:
@@ -147,8 +147,8 @@ def seed_programs(db: Session):
 
 
 if __name__ == "__main__":
-    # db = next(get_db())
+    db = next(get_db())
     # seed_states(db)
-    # seed_institutes(db)
+    seed_institutes(db)
     # seed_programs(db)
     pass

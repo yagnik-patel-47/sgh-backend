@@ -2,6 +2,7 @@ import scrapy
 import pandas as pd
 import re
 from admission_scraper.utils import clean_body_content, extract_context
+import random
 
 
 def getUrls():
@@ -10,11 +11,18 @@ def getUrls():
         urls = df["matched_links"].tolist()
         urls = [url for sublist in urls for url in sublist]
         urls = list(set(urls))
+        random.shuffle(urls)
         return urls[:50]
     except:
         # If the file doesn't exist, return an empty list
         print("File not found")
         return []
+
+
+def remove_trailing_slash(url):
+    if url.endswith("/"):
+        return url[:-1]
+    return url
 
 
 def get_site_from_link(link):
@@ -32,8 +40,8 @@ def get_site_from_link(link):
             data = pd.read_json(f)
 
         for _, row in data.iterrows():
-            if link in row["matched_links"]:
-                return row["site"]
+            if remove_trailing_slash(link) in row["matched_links"]:
+                return remove_trailing_slash(row["original_url"])
 
         return None
     except Exception as e:
@@ -54,7 +62,7 @@ class PagesSpider(scrapy.Spider):
             + r"\b(?:\d{1,2}[- ]?(?:Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:tember)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)[- ]?\d{2,4})\b|"
             + r"\b(?:\d{4}[-./]\d{1,2}[-./]\d{1,2})\b)"
         )
-        word_pattern = rf"\b{admission_terms}\b"
+        word_pattern = rf"\b{admission_terms}s?\b"
 
         body_content = response.css("body").get()
         if not body_content:
@@ -75,10 +83,11 @@ class PagesSpider(scrapy.Spider):
                     if word_matches:
                         site = get_site_from_link(response.url)
                         yield {
-                            "url": response.url,
+                            "url": remove_trailing_slash(response.url),
                             "site": site,
                             "date": date_match["match"],
                             "context": date_match["context"],
+                            "related_dates": date_match.get("related_dates", []),
                         }
 
 
