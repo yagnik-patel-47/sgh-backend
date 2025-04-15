@@ -1,0 +1,47 @@
+[
+  {
+    "name": "Deadline"
+  },
+  {
+    "name": "Important"
+  },
+  {
+    "name": "Update"
+  },
+  {
+    "name": "New"
+  },
+  {
+    "name": "Event"
+  },
+  {
+    "name": "Admission"
+  },
+  {
+    "name": "Exam"
+  },
+  {
+    "name": "Results"
+  },
+  {
+    "name": "Registration"
+  },
+  {
+    "name": "Payment"
+  },
+  {
+    "name": "Scholarship"
+  },
+  {
+    "name": "Undergraduate"
+  },
+  {
+    "name": "Postgraduate"
+  },
+  {
+    "name": "International"
+  },
+  {
+    "name": "Alert"
+  }
+]

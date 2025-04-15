@@ -1,6 +1,17 @@
-from sqlalchemy import Column, Integer, String, Text, Uuid, TIMESTAMP, CHAR, DATE
+from sqlalchemy import (
+    Column,
+    Integer,
+    String,
+    Text,
+    Uuid,
+    TIMESTAMP,
+    CHAR,
+    DATE,
+    ForeignKey,
+)
 from sqlalchemy.ext.declarative import declarative_base
 from datetime import datetime
+from sqlalchemy.orm import relationship
 
 Base = declarative_base()
 
@@ -59,6 +70,11 @@ class Announcement(Base):
     url = Column(String(255), nullable=False)
     institution_id = Column(Uuid, nullable=False)
     state_id = Column(Uuid, nullable=False)
+    scraped_page_id = Column(
+        Uuid,
+        ForeignKey("scraped_pages.scraped_page_id", ondelete="SET NULL"),
+        nullable=False,
+    )
     published_date = Column(DATE, nullable=True)
     application_open_date = Column(DATE, nullable=True)
     application_deadline = Column(DATE, nullable=True)
@@ -69,6 +85,10 @@ class Announcement(Base):
     updated_at = Column(TIMESTAMP, default=datetime.now())
     search_vector = Column(
         String(255), nullable=True, index=True, server_default="''::character varying"
+    )
+
+    scraped_page = relationship(
+        "ScrapedPage", back_populates="announcements", foreign_keys=[scraped_page_id]
     )
 
     def __repr__(self):
@@ -82,3 +102,40 @@ class AnnouncementProgram(Base):
 
     def __repr__(self):
         return f"<announcement_id='{self.announcement_id}', program_id='{self.program_id}')>"
+
+
+class ScrapedPage(Base):
+    __tablename__ = "scraped_pages"
+
+    scraped_page_id = Column(
+        Uuid, primary_key=True, server_default=str("gen_random_uuid()")
+    )
+    url = Column(String(255), unique=True, nullable=False)
+    site = Column(String(255), nullable=False)
+    content_hash = Column(String(64), nullable=False)
+    last_scraped = Column(TIMESTAMP, default=datetime.now(), nullable=False)
+
+    announcements = relationship("Announcement", back_populates="scraped_page")
+
+    def __repr__(self):
+        return f"<url='{self.url}')>"
+
+
+class Tag(Base):
+    __tablename__ = "tags"
+
+    tag_id = Column(Uuid, primary_key=True, server_default=str("gen_random_uuid()"))
+    name = Column(String(50), unique=True, nullable=False)
+
+    def __repr__(self):
+        return f"<name='{self.name}')>"
+
+
+class AnnouncementTags(Base):
+    __tablename__ = "announcement_tags"
+
+    announcement_id = Column(Uuid, primary_key=True)
+    tag_id = Column(Uuid, primary_key=True)
+
+    def __repr__(self):
+        return f"<announcement_id='{self.announcement_id}', tag_id='{self.tag_id}')>"

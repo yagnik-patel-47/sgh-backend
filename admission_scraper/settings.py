@@ -11,13 +11,13 @@ BOT_NAME = "admission_scraper"
 
 SPIDER_MODULES = ["admission_scraper.spiders"]
 NEWSPIDER_MODULE = "admission_scraper.spiders"
-
+LOG_LEVEL = "ERROR"
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36"
 
 # Obey robots.txt rules
-ROBOTSTXT_OBEY = True
+ROBOTSTXT_OBEY = False
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 # CONCURRENT_REQUESTS = 32
@@ -29,6 +29,15 @@ ROBOTSTXT_OBEY = True
 # The download delay setting will honor only one of:
 # CONCURRENT_REQUESTS_PER_DOMAIN = 16
 # CONCURRENT_REQUESTS_PER_IP = 16
+RETRY_TIMES = 0
+DOWNLOAD_TIMEOUT = 15
+
+# FEEDS setting is causing both spiders to write to uni.jsonl
+# Comment out or remove the FEEDS setting
+# FEEDS = {
+#     "pages.jsonl": {"format": "jsonlines", "overwrite": True, "spider": "pages"},
+#     "uni.jsonl": {"format": "jsonlines", "overwrite": True, "spider": "uni"},
+# }
 
 # Disable cookies (enabled by default)
 # COOKIES_ENABLED = False
@@ -63,7 +72,7 @@ ROBOTSTXT_OBEY = True
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-    "admission_scraper.pipelines.AdmissionScraperPipeline": 300,
+    "admission_scraper.pipelines.SpiderSpecificOutputPipeline": 800,
     # "admission_scraper.pipelines.DebugOutputPipeline": 400,
 }
 

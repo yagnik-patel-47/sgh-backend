@@ -2,18 +2,16 @@ from google import genai
 from dotenv import load_dotenv
 import os
 import json
-from llm.utils import extract_program_names
+from db.data import get_all_programs, get_all_tags
+from db.session import get_db
 
 load_dotenv()
 
-# content = """
-# Admission Notice 2024-25 for Payment Click to view | Notice for NAD Digilocker ABC ID Click to view | Home / PG Diploma Courses PG Diploma Courses PG Diploma Courses Date: 20/06/2023 Letter No. : CNLU/PGDC/2023-06 : List of selected candidates for Post Graduate Diploma Courses at CNLU, Patna Date: 31/03/2023 Notice for PG Diploma Courses Chanakya National Law University, Patna has begin One Year Post Graduate Diploma Course for the Academic Session 2022 – 2023. a) Post Graduate Diploma in Human Rights. b) Post Graduate Diploma in Cyber Law. c) Post Graduate Diploma in Intellectual Property Law. d) Post Graduate
-# """
-# url = "https://cnlu.ac.in/pg-diploma-courses/"
-
+db = next(get_db())
 client = genai.Client(api_key=os.environ.get("GEMINI_API_KEY"))
 base_prompt = ""
-programs = extract_program_names()
+programs = get_all_programs(db)
+tags = get_all_tags(db)
 
 try:
     with open("base_prompt.txt", "r") as file:
@@ -96,6 +94,8 @@ def extract_with_gemini(content, url):
                                     "enum": [
                                         "admission_dates",
                                         "contact_info",
+                                        "exam_info",
+                                        "result_info",
                                         "general",
                                     ],
                                     "description": "Type of announcement",
@@ -104,9 +104,18 @@ def extract_with_gemini(content, url):
                                     "type": "array",
                                     "items": {
                                         "type": "string",
-                                        "enum": programs,
+                                        "enum": list(map(lambda x: x.name, programs)),
                                         "description": "Names of programs or courses related to the announcement",
                                     },
+                                },
+                                "tags": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string",
+                                        "enum": list(map(lambda x: x.name, tags)),
+                                        "description": "Tags related to the announcement",
+                                    },
+                                    "description": "List of tags associated with the announcement",
                                 },
                             },
                         },
@@ -118,6 +127,11 @@ def extract_with_gemini(content, url):
 
     response_text = response.candidates[0].content.parts[0].text
     result_json = json.loads(response_text)
-    # print(response_text)
-    # print(result_json)
+    if "announcements" in result_json:
+        for announcement in result_json["announcements"]:
+            if (
+                announcement.get("announcement_type") == "admission_dates"
+                and announcement.get("application_deadline") is None
+            ):
+                announcement["announcement_type"] = "general"
     return result_json

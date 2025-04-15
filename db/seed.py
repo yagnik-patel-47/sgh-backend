@@ -1,10 +1,10 @@
 from sqlalchemy.orm import Session
-from models import Institute, State, Program
-from setup import get_db
+from db.models import Institute, State, Program, Tag
+from db.session import get_db
 import pandas as pd
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError
 import logging
-from utils import split_content, normalize_state_name, get_all_states
+from db.utils import split_content, normalize_state_name, get_all_states
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -12,7 +12,30 @@ logger = logging.getLogger(__name__)
 
 def seed_institutes(db: Session):
     # Load sites data
-    df = pd.read_csv("data/central_universities.csv")
+    # Load data from multiple CSV files
+    csv_files = [
+        "data/central_universities.csv",
+        # "data/state_universities.csv",
+        "data/iits.csv",
+    ]
+
+    # Combine all CSV files into a single DataFrame
+    dataframes = []
+    for file in csv_files:
+        try:
+            temp_df = pd.read_csv(file)
+            dataframes.append(temp_df)
+            logger.info(f"Successfully loaded {file}")
+        except Exception as e:
+            logger.error(f"Error loading {file}: {str(e)}")
+
+    # Concatenate all dataframes
+    if dataframes:
+        df = pd.concat(dataframes, ignore_index=True)
+        logger.info(f"Total records loaded: {len(df)}")
+    else:
+        logger.error("No data loaded from CSV files")
+        df = pd.DataFrame()  # Empty DataFrame as fallback
     data = df.to_dict(orient="records")
 
     # Load states data and create a mapping of state names to state_ids
@@ -146,9 +169,29 @@ def seed_programs(db: Session):
         raise Exception(f"Database error: {str(e)}")
 
 
+def seed_tags(db: Session):
+    tags = pd.read_json("seed_data\\tags.json")
+    tags = tags.to_dict(orient="records")
+
+    try:
+        for tag in tags:
+            tag_instance = Tag(name=tag["name"])
+            db.add(tag_instance)
+        db.commit()
+    except IntegrityError as e:
+        db.rollback()
+        logger.error(f"Integrity error creating tag: {str(e)}")
+        raise ValueError(f"Value already exists: {str(e)}")
+    except SQLAlchemyError as e:
+        db.rollback()
+        logger.error(f"Database error creating tag: {str(e)}")
+        raise Exception(f"Database error: {str(e)}")
+
+
 if __name__ == "__main__":
     db = next(get_db())
     # seed_states(db)
-    seed_institutes(db)
     # seed_programs(db)
+    # seed_tags(db)
+    seed_institutes(db)
     pass

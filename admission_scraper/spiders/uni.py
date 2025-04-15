@@ -1,23 +1,23 @@
 import scrapy
-from scrapy.linkextractors import LinkExtractor
+from scrapy.linkextractors.lxmlhtml import LxmlLinkExtractor
 import re
 import pandas as pd
 from bs4 import BeautifulSoup
+from admission_scraper.utils import remove_trailing_slash
+from db.session import get_db
+from db.data import get_all_institutes
 
 
-def get_sites():
-    df = pd.read_csv("data/central_universities.csv")
-    return df["url"].tolist()
-
-
-def remove_trailing_slash(url):
-    if url.endswith("/"):
-        return url[:-1]
-    return url
+def get_sites() -> list[str]:
+    all_institutes = get_all_institutes(next(get_db()))
+    if all_institutes is not None:
+        return [str(institute.website) for institute in all_institutes]
+    return []
 
 
 class UniSpider(scrapy.Spider):
     name = "uni"
+    link_extractor = LxmlLinkExtractor()
 
     def start_requests(self):
         urls = get_sites()
@@ -25,8 +25,6 @@ class UniSpider(scrapy.Spider):
             yield scrapy.Request(
                 url=url, callback=self.parse, meta={"original_url": url}
             )
-
-    link_extractor = LinkExtractor()
 
     def parse(self, response):
         admission_terms = [
@@ -45,6 +43,7 @@ class UniSpider(scrapy.Spider):
         original_url = response.meta.get("original_url")
 
         # TODO: Actually update the initial url with the response.url in csv
+
         res = {
             "site": remove_trailing_slash(response.url),
             "original_url": remove_trailing_slash(original_url),
@@ -66,12 +65,12 @@ class UniSpider(scrapy.Spider):
             links = response.css("a").getall()
             for link in links:
                 soup = BeautifulSoup(link, "html.parser")
-                link_href = soup.a.get("href")
-                text = soup.a.get_text()
+                link_href = soup.a.get("href") if soup.a else ""
+                text = soup.a.get_text() if soup.a else ""
                 if not link_href:
                     continue
                 text_matches = re.findall(word_pattern, text, re.IGNORECASE)
-                url_matches = re.findall(word_pattern, link_href, re.IGNORECASE)
+                url_matches = re.findall(word_pattern, str(link_href), re.IGNORECASE)
                 word_matches = [*text_matches, *url_matches]
                 if word_matches:
                     if (

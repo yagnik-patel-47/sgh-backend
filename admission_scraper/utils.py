@@ -1,11 +1,27 @@
 from bs4 import BeautifulSoup
 import re
 from difflib import SequenceMatcher
+import hashlib
+from datetime import datetime
+from zoneinfo import ZoneInfo
 
 
 def similarity(a, b):
     """Calculate text similarity ratio between two strings."""
     return SequenceMatcher(None, a, b).ratio()
+
+
+def generate_content_hash(content):
+    """Generate SHA-256 hash of content for change detection"""
+    return hashlib.sha256(content.encode()).hexdigest()
+
+
+def should_update(last_update, refresh_days=7):
+    """Check if content should be updated based on age"""
+    if not last_update:
+        return True
+    age = datetime.now(ZoneInfo("Asia/Kolkata")) - last_update
+    return age.days >= refresh_days
 
 
 def extract_context(
@@ -163,6 +179,12 @@ def clean_body_content(body_content):
     )
 
     return cleaned_content
+
+
+def remove_trailing_slash(url):
+    if url.endswith("/"):
+        return url[:-1]
+    return url
 
 
 def extract_semantic_sections(text):

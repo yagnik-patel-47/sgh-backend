@@ -1,6 +1,6 @@
 import re
 from sqlalchemy.orm import Session
-from models import State
+from db.models import State
 
 
 def split_content(content, max_length=100):

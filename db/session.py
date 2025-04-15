@@ -6,7 +6,7 @@ import os
 load_dotenv()
 
 DATABASE_URL = os.getenv("DB_URL")
-engine = create_engine(DATABASE_URL, echo=True)
+engine = create_engine(DATABASE_URL, pool_size=15)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 

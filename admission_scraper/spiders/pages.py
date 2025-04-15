@@ -1,28 +1,47 @@
 import scrapy
 import pandas as pd
 import re
-from admission_scraper.utils import clean_body_content, extract_context
+from admission_scraper.utils import (
+    clean_body_content,
+    extract_context,
+    remove_trailing_slash,
+)
 import random
+from db.session import get_db
+from db.models import ScrapedPage
+from db.data import get_all_scraped_pages
+from datetime import datetime
+from zoneinfo import ZoneInfo
+import os
+import io
 
 
-def getUrls():
+def getUrls() -> list[str]:
     try:
-        df = pd.read_json("uni.json")
-        urls = df["matched_links"].tolist()
-        urls = [url for sublist in urls for url in sublist]
-        urls = list(set(urls))
-        random.shuffle(urls)
-        return urls[:50]
-    except:
-        # If the file doesn't exist, return an empty list
-        print("File not found")
+        # Check if file exists first
+        if not os.path.exists("uni.jsonl"):
+            print("Warning: uni.jsonl file not found")
+            return []
+
+        # Open the file and use StringIO to avoid FutureWarning
+        with open("uni.jsonl", "r", encoding="utf-8") as f:
+            content = f.read()
+
+        # Process only if file has content
+        if content.strip():
+            df = pd.read_json(io.StringIO(content), lines=True)
+            urls = df["matched_links"].tolist()
+            urls = [url for sublist in urls for url in sublist]
+            urls = list(set(urls))
+            random.shuffle(urls)
+            return urls
+        else:
+            print("uni.jsonl file is empty")
+            return []
+    except Exception as e:
+        # More detailed error handling
+        print(f"Error reading uni.jsonl: {e}")
         return []
-
-
-def remove_trailing_slash(url):
-    if url.endswith("/"):
-        return url[:-1]
-    return url
 
 
 def get_site_from_link(link):
@@ -36,12 +55,24 @@ def get_site_from_link(link):
         str: The site value if found, None otherwise
     """
     try:
-        with open("uni.json", "r") as f:
-            data = pd.read_json(f)
+        # Check if file exists first
+        if not os.path.exists("uni.jsonl"):
+            print("Warning: uni.jsonl file not found in get_site_from_link")
+            return None
+
+        # Open the file and use StringIO to avoid FutureWarning
+        with open("uni.jsonl", "r", encoding="utf-8") as f:
+            content = f.read()
+
+        if not content.strip():
+            print("uni.jsonl file is empty in get_site_from_link")
+            return None
+
+        data = pd.read_json(io.StringIO(content), lines=True)
 
         for _, row in data.iterrows():
-            if remove_trailing_slash(link) in row["matched_links"]:
-                return remove_trailing_slash(row["original_url"])
+            if link in row["matched_links"]:
+                return row["original_url"]
 
         return None
     except Exception as e:
@@ -51,9 +82,43 @@ def get_site_from_link(link):
 
 class PagesSpider(scrapy.Spider):
     name = "pages"
-    start_urls = getUrls()
+    refresh_days = 2
+    counter = 0
+
+    def start_requests(self):
+        self.urls = getUrls()
+        # diff_urls = []
+        # db = next(get_db())
+        # scraped_pages = get_all_scraped_pages(db) or []
+        # scraped_urls = (
+        #     [page.url for page in scraped_pages] if scraped_pages is not None else []
+        # )
+
+        # for url in self.urls:
+        #     existing = url in scraped_urls
+        #     if existing:
+        #         existing = next((x for x in scraped_pages if x.url == url), None)
+
+        #     if (
+        #         not existing
+        #         or (datetime.now(ZoneInfo("Asia/Kolkata")) - existing.last_scraped).days
+        #         >= self.refresh_days
+        #     ):
+        #         # New URL or needs refresh
+        #         diff_urls.append(url)
+        #         yield scrapy.Request(
+        #             url=url, callback=self.parse, meta={"original_url": url}
+        #         )
+        # self.urls = diff_urls
+
+        for url in self.urls:
+            yield scrapy.Request(
+                url=url, callback=self.parse, meta={"original_url": url}
+            )
 
     def parse(self, response):
+        self.counter += 1
+
         admission_terms = (
             r"(?:admission|apply|application|deadline|enroll|registration)"
         )
@@ -72,7 +137,7 @@ class PagesSpider(scrapy.Spider):
 
         date_matches = extract_context(cleaned_body_content, date_pattern)
 
-        print(f"\n\nFound {len(date_matches)} date matches in {response.url}\n\n")
+        # print(f"\n\nFound {len(date_matches)} date matches in {response.url}\n\n")
 
         if len(date_matches) != 0:
             for date_match in date_matches:
@@ -81,7 +146,7 @@ class PagesSpider(scrapy.Spider):
                         word_pattern, date_match["context"], re.IGNORECASE
                     )
                     if word_matches:
-                        site = get_site_from_link(response.url)
+                        site = get_site_from_link(response.meta.get("original_url"))
                         yield {
                             "url": remove_trailing_slash(response.url),
                             "site": site,
@@ -89,6 +154,8 @@ class PagesSpider(scrapy.Spider):
                             "context": date_match["context"],
                             "related_dates": date_match.get("related_dates", []),
                         }
+
+        print("processed ", self.counter, "from ", len(self.urls), " urls")
 
 
 def is_likely_phone_number(text):
