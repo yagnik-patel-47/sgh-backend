@@ -1,5 +1,4 @@
 from llm.gemini import extract_with_gemini
-import pandas as pd
 from db.session import get_db
 from db.data import (
     get_institute_from_website,
@@ -11,6 +10,7 @@ from db.models import Announcement, AnnouncementProgram, ScrapedPage, Announceme
 import hashlib
 from datetime import datetime
 from zoneinfo import ZoneInfo
+from sqlalchemy import update
 
 
 db = next(get_db())
@@ -31,6 +31,15 @@ def content_changed(url, content):
 
 
 def process_page(url: str, site: str, items: list[dict[str, str]]):
+    scraped_info = db.query(ScrapedPage).filter(ScrapedPage.url == url).first()
+
+    if scraped_info:
+        related_announcements = scraped_info.announcements
+        if related_announcements:
+            for announcement in related_announcements:
+                db.delete(announcement)
+            # db.commit()
+
     for item in items:
         try:
             extracted_data = extract_with_gemini(item["context"], url)
@@ -39,51 +48,46 @@ def process_page(url: str, site: str, items: list[dict[str, str]]):
                     print("\nannouncement:", announcement, "\n")
                     institute = get_institute_from_website(db, item["site"])
                     if institute:
-                        try:
-                            programs = announcement.get("programs_courses", [])
-                            tags = announcement.get("tags", [])
 
-                            announcement_data = {
-                                key: value
-                                for key, value in announcement.items()
-                                if key != "programs_courses" and key != "tags"
-                            }
-                            ann = Announcement(
-                                institution_id=institute.institution_id,
-                                state_id=institute.state_id,
-                                url=url,
-                                **announcement_data,
+                        programs = announcement.get("programs_courses", [])
+                        tags = announcement.get("tags", [])
+
+                        announcement_data = {
+                            key: value
+                            for key, value in announcement.items()
+                            if key != "programs_courses" and key != "tags"
+                        }
+                        ann = Announcement(
+                            institution_id=institute.institution_id,
+                            state_id=institute.state_id,
+                            url=url,
+                            **announcement_data,
+                        )
+                        db.add(ann)
+                        db.flush()
+                        announcement_id = ann.announcement_id
+
+                        for program in programs:
+                            program_instance = next(
+                                (x for x in db_programs if x.name == program), None
                             )
-                            db.add(ann)
-                            db.flush()
-                            announcement_id = ann.announcement_id
-
-                            for program in programs:
-                                program_instance = next(
-                                    (x for x in db_programs if x.name == program), None
+                            if program_instance:
+                                announcement_program = AnnouncementProgram(
+                                    announcement_id=announcement_id,
+                                    program_id=program_instance.program_id,
                                 )
-                                if program_instance:
-                                    announcement_program = AnnouncementProgram(
-                                        announcement_id=announcement_id,
-                                        program_id=program_instance.program_id,
-                                    )
-                                    db.add(announcement_program)
+                                db.add(announcement_program)
 
-                            for tag in tags:
-                                tag_instance = next(
-                                    (x for x in db_tags if x.name == tag), None
+                        for tag in tags:
+                            tag_instance = next(
+                                (x for x in db_tags if x.name == tag), None
+                            )
+                            if tag_instance:
+                                announcement_tags = AnnouncementTags(
+                                    announcement_id=announcement_id,
+                                    tag_id=tag_instance.tag_id,
                                 )
-                                if tag_instance:
-                                    announcement_tags = AnnouncementTags(
-                                        announcement_id=announcement_id,
-                                        tag_id=tag_instance.tag_id,
-                                    )
-                                    db.add(announcement_tags)
-
-                            # db.commit()
-                        except Exception as e:
-                            print(f"Error saving announcement: {e}")
-                            db.rollback()
+                                db.add(announcement_tags)
                     else:
                         print(f"No matching institute found for URL: {item['site']}")
 
@@ -95,46 +99,22 @@ def process_page(url: str, site: str, items: list[dict[str, str]]):
         [item["context"] for item in items if item["context"] is not None]
     )
     content_hash = hashlib.sha256(merged_content.encode()).hexdigest()
-    db.add(
-        ScrapedPage(
-            url=url,
-            site=site,
-            last_scraped=datetime.now(ZoneInfo("Asia/Kolkata")),
-            content_hash=content_hash,
+    if scraped_info is not None:
+        db.execute(
+            update(ScrapedPage)
+            .where(ScrapedPage.url == url)
+            .values(
+                last_scraped=datetime.now(ZoneInfo("Asia/Kolkata")),
+                content_hash=content_hash,
+            )
         )
-    )
-    # db.rollback()
+    else:
+        db.add(
+            ScrapedPage(
+                url=url,
+                site=site,
+                last_scraped=datetime.now(ZoneInfo("Asia/Kolkata")),
+                content_hash=content_hash,
+            )
+        )
     db.commit()
-
-
-# df = pd.read_json("pages.jsonl", lines=True)
-
-# grouped_df = (
-#     df.groupby("url")
-#     .apply(
-#         lambda x: pd.Series(
-#             {
-#                 "site": x["site"].iloc[0],
-#                 "items": x.to_dict("records"),
-#             }
-#         ),
-#         include_groups=False,
-#     )
-#     .reset_index()
-# )
-# df = grouped_df
-
-# for i, (index, row) in enumerate(df.sample(20).iterrows()):
-# print("Processing group", i + 1, "of", len(df))
-# if row["url"] in scraped_urls:
-#     print(f"Skipping {row['url']}")
-#     continue
-
-# merged_content = " ".join(
-#     [item["context"] for item in row["items"] if item["context"] is not None]
-# )
-# if not content_changed(row["url"], merged_content):
-#     print(f"Skipping unchanged content for {row['url']}")
-#     continue
-# process_page(row["url"], row["items"])
-# print(f"Processed group {i + 1} - {row['url']}")
