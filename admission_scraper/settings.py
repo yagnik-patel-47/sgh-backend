@@ -72,7 +72,7 @@ DOWNLOAD_TIMEOUT = 15
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-    "admission_scraper.pipelines.SpiderSpecificOutputPipeline": 800,
+    # "admission_scraper.pipelines.SpiderSpecificOutputPipeline": 800,
     # "admission_scraper.pipelines.DebugOutputPipeline": 400,
 }
 
@@ -100,3 +100,4 @@ ITEM_PIPELINES = {
 # Set settings whose default value is deprecated to a future-proof value
 TWISTED_REACTOR = "twisted.internet.asyncioreactor.AsyncioSelectorReactor"
 FEED_EXPORT_ENCODING = "utf-8"
+SCHEDULER_PRIORITY_QUEUE = "scrapy.pqueues.DownloaderAwarePriorityQueue"

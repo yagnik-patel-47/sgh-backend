@@ -15,6 +15,7 @@ def main():
 
     deferred = process.crawl(UniSpider)
     deferred.addCallback(lambda _: process.crawl(PagesSpider))
+    # deferred = process.crawl(PagesSpider)
     process.start()
 
     try:

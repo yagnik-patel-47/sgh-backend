@@ -1,8 +1,5 @@
 import scrapy
 from scrapy.linkextractors.lxmlhtml import LxmlLinkExtractor
-import re
-import pandas as pd
-from bs4 import BeautifulSoup
 from admission_scraper.utils import remove_trailing_slash
 from db.session import get_db
 from db.data import get_all_institutes
@@ -15,71 +12,73 @@ def get_sites() -> list[str]:
     return []
 
 
+admission_terms = [
+    "admission",
+    "announcement",
+    "update",
+    "notification",
+    # "program",
+    # "course",
+    # "degree",
+    "enrollment",
+]
+word_pattern = r"\b(?:" + "|".join(admission_terms) + r")s?\b"
+
+
 class UniSpider(scrapy.Spider):
     name = "uni"
-    link_extractor = LxmlLinkExtractor()
+    link_extractor = LxmlLinkExtractor(
+        canonicalize=True, unique=True, allow=word_pattern
+    )
+    custom_settings = {
+        "FEEDS": {"uni.jsonl": {"format": "jsonlines", "overwrite": True}}
+    }
+
+    def __init__(self, *args, **kwargs):
+        super(UniSpider, self).__init__(*args, **kwargs)
+        self.visited_urls = set()
 
     def start_requests(self):
         urls = get_sites()
         for url in urls:
             yield scrapy.Request(
-                url=url, callback=self.parse, meta={"original_url": url}
+                url=url,
+                callback=self.parse,
+                meta={"original_url": url, "depth": 0},
             )
 
     def parse(self, response):
-        admission_terms = [
-            "admission",
-            "announcement",
-            "update",
-            "notification",
-            # "program",
-            # "course",
-            # "degree",
-            "enrollment",
-        ]
-        word_pattern = r"\b(?:" + "|".join(admission_terms) + r")s?\b"
-
-        # Use original URL from the CSV instead of response.url
         original_url = response.meta.get("original_url")
+        current_depth = response.meta.get("depth", 0)
+        current_url = remove_trailing_slash(response.url)
 
-        # TODO: Actually update the initial url with the response.url in csv
+        if current_url in self.visited_urls:
+            return
+        self.visited_urls.add(current_url)
 
-        res = {
-            "site": remove_trailing_slash(response.url),
-            "original_url": remove_trailing_slash(original_url),
-            "matched_links": [],
-        }
+        matched_links = []
 
         for link in self.link_extractor.extract_links(response):
-            text_matches = re.findall(word_pattern, link.text, re.IGNORECASE)
-            url_matches = re.findall(word_pattern, link.url, re.IGNORECASE)
-            word_matches = [*text_matches, *url_matches]
-            if (
-                word_matches
-                and remove_trailing_slash(link.url) not in res["matched_links"]
-            ):
-                res["matched_links"].append(remove_trailing_slash(link.url))
-                print(f"Found matches {response.url} - {word_matches} in '{link.url}'")
+            clean_link_url = remove_trailing_slash(link.url)
 
-        if not res["matched_links"]:
-            links = response.css("a").getall()
-            for link in links:
-                soup = BeautifulSoup(link, "html.parser")
-                link_href = soup.a.get("href") if soup.a else ""
-                text = soup.a.get_text() if soup.a else ""
-                if not link_href:
-                    continue
-                text_matches = re.findall(word_pattern, text, re.IGNORECASE)
-                url_matches = re.findall(word_pattern, str(link_href), re.IGNORECASE)
-                word_matches = [*text_matches, *url_matches]
-                if word_matches:
-                    if (
-                        word_matches
-                        and remove_trailing_slash(link_href) not in res["matched_links"]
-                    ):
-                        res["matched_links"].append(remove_trailing_slash(link_href))
-                        print(
-                            f"Found matches {response.url} - {word_matches} in '{link_href}'"
-                        )
+            if clean_link_url in self.visited_urls:
+                continue
 
-        yield res
+            matched_links.append(clean_link_url)
+            print(f"Found matches {response.url} - '{link.url}'")
+
+            if current_depth == 0:
+                yield scrapy.Request(
+                    url=link.url,
+                    callback=self.parse,
+                    meta={
+                        "original_url": original_url,
+                        "depth": 1,
+                    },
+                )
+
+        item = {
+            "site": original_url,
+            "matched_links": list(matched_links),
+        }
+        yield item

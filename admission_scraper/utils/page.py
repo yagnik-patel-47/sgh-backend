@@ -1,7 +1,6 @@
 from bs4 import BeautifulSoup
 import re
 from difflib import SequenceMatcher
-import hashlib
 from datetime import datetime
 from zoneinfo import ZoneInfo
 
@@ -9,11 +8,6 @@ from zoneinfo import ZoneInfo
 def similarity(a, b):
     """Calculate text similarity ratio between two strings."""
     return SequenceMatcher(None, a, b).ratio()
-
-
-def generate_content_hash(content):
-    """Generate SHA-256 hash of content for change detection"""
-    return hashlib.sha256(content.encode()).hexdigest()
 
 
 def should_update(last_update, refresh_days=7):
@@ -169,7 +163,7 @@ def clean_body_content(body_content):
     """Clean HTML content by removing scripts, styles, and normalizing whitespace."""
     soup = BeautifulSoup(body_content, "html.parser")
 
-    for script_or_style in soup(["script", "style"]):
+    for script_or_style in soup(["script", "style", "a", "iframe"]):
         script_or_style.extract()
 
     # Get text or further process the content
@@ -179,12 +173,6 @@ def clean_body_content(body_content):
     )
 
     return cleaned_content
-
-
-def remove_trailing_slash(url):
-    if url.endswith("/"):
-        return url[:-1]
-    return url
 
 
 def extract_semantic_sections(text):
